@@ -25,13 +25,13 @@ public class UserService implements UserDetailsService {
     }
 
     public void registerUser(User user) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
         if(repo.findByUsername(user.getUsername())==null&&repo.findByEmail(user.getEmail())==null) {
-            String encryptedpassword = encoder.encode(user.getPassword());
+            String encryptedpassword = bCryptPasswordEncoder.encode(user.getPassword());
             user.setPassword(encryptedpassword);
             repo.save(user);
         }
     }
+
 
     public void deleteUser(Long id) {
         if(repo.existsById(id))
