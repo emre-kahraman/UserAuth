@@ -16,24 +16,23 @@ public class UserController {
 
 
     @GetMapping("/listusers")
-    public List<User> getUsers(){
+    public List<UserDTO> getUsers(){
         return userservice.getUsers();
     }
 
     @GetMapping("/findbyemail")
-    public User getbyEmail(@RequestParam String email){
+    public UserDTO getbyEmail(@RequestParam String email){
         return userservice.getbyEmail(email);
     }
 
     @GetMapping("findbyusername")
-    public User getbyUsername(@RequestParam String username){
+    public UserDTO getbyUsername(@RequestParam String username){
         return userservice.getbyUsername(username);
     }
 
     @PostMapping("/register")
-    public void registerUser(@RequestBody User user) {
-
-        userservice.registerUser(user);
+    public void registerUser(@RequestBody UserDTO userdto) {
+        userservice.registerUser(userdto);
     }
 
     @DeleteMapping("/delete")

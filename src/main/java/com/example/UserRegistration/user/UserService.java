@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,15 +21,17 @@ public class UserService implements UserDetailsService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public List<User> getUsers(){
-        return repo.findAll();
+    public List<UserDTO> getUsers(){
+        List<User> users = repo.findAll();
+        List<UserDTO> userDTOList = new ArrayList<UserDTO>();
+        users.stream().forEach(user -> userDTOList.add(convert(user)));
+        return userDTOList;
     }
 
-    public void registerUser(User user) {
-        if(repo.findByUsername(user.getUsername())==null&&repo.findByEmail(user.getEmail())==null) {
-            String encryptedpassword = bCryptPasswordEncoder.encode(user.getPassword());
-            user.setPassword(encryptedpassword);
-            repo.save(user);
+    public void registerUser(UserDTO userdto) {
+        if(repo.findByUsername(userdto.getUsername())==null&&repo.findByEmail(userdto.getEmail())==null) {
+            String encryptedpassword = bCryptPasswordEncoder.encode(userdto.getPassword());
+            repo.save(new User(userdto.getUsername(), encryptedpassword, userdto.getEmail()));
         }
     }
 
@@ -39,12 +42,21 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public User getbyEmail(String email) {
-        return repo.findByEmail(email);
+    public UserDTO getbyEmail(String email) {
+        User user = repo.findByEmail(email);
+        return convert(user);
     }
 
-    public User getbyUsername(String username) {
-        return repo.findByUsername(username);
+    public UserDTO getbyUsername(String username) {
+        User user = repo.findByUsername(username);
+        return convert(user);
+    }
+
+    private UserDTO convert(User user){
+        UserDTO userdto = new UserDTO();
+        userdto.setUsername(user.getUsername());
+        userdto.setEmail(user.getEmail());
+        return userdto;
     }
 
     @Override

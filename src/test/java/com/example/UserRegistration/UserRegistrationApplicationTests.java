@@ -3,6 +3,7 @@ package com.example.UserRegistration;
 import com.example.UserRegistration.user.User;
 import com.example.UserRegistration.user.UserService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,7 @@ class UserRegistrationApplicationTests {
 	@Autowired
 	private UserService userService;
 
+	/*
 	@Test
 	public void ShouldSaveUser(){
 		User user = new User("asd","asd","asd@gmail.com");
@@ -42,6 +44,6 @@ class UserRegistrationApplicationTests {
 		userService.registerUser(user);
 		userService.deleteUser(user.getId());
 		Assertions.assertNull(userService.getbyUsername("asd"));
-	}
+	}*/
 
 }
