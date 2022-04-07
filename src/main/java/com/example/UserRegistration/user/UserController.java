@@ -1,11 +1,14 @@
 package com.example.UserRegistration.user;
 
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userservice;
@@ -15,29 +18,29 @@ public class UserController {
     }
 
 
-    @GetMapping("/listusers")
-    public List<UserDTO> getUsers(){
+    @GetMapping("/users")
+    public ResponseEntity<List<UserDTO>> getUsers(){
         return userservice.getUsers();
     }
 
-    @GetMapping("/findbyemail")
-    public UserDTO getbyEmail(@RequestParam String email){
+    @GetMapping("/users/{email}")
+    public ResponseEntity<UserDTO> getbyEmail(@PathVariable("email") String email){
         return userservice.getbyEmail(email);
     }
 
-    @GetMapping("findbyusername")
-    public UserDTO getbyUsername(@RequestParam String username){
+    @GetMapping("/users/findbyusername/{name}")
+    public ResponseEntity<UserDTO> getbyUsername(@PathVariable String username){
         return userservice.getbyUsername(username);
     }
 
-    @PostMapping("/register")
-    public void registerUser(@RequestBody UserDTO userdto) {
-        userservice.registerUser(userdto);
+    @PostMapping("/users")
+    public ResponseEntity<UserDTO> registerUser(@RequestBody User user) {
+        return userservice.registerUser(user);
     }
 
-    @DeleteMapping("/delete")
-    public void deleteUser(@RequestParam Long id){
-        userservice.deleteUser(id);
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id){
+        return userservice.deleteUser(id);
     }
 
 
