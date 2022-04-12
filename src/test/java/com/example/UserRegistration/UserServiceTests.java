@@ -102,11 +102,11 @@ public class UserServiceTests {
         String username = "test";
         User user = new User("test","test","test@gmail.com");
 
-        when(userRepository.findByEmail(username)).thenReturn(user);
+        when(userRepository.findByUsername(username)).thenReturn(user);
 
-        ResponseEntity<UserDTO> userDTOResponseEntity = userService.getbyEmail(username);
+        ResponseEntity<UserDTO> userDTOResponseEntity = userService.getbyUsername(username);
 
-        verify(userRepository).findByEmail(username);
+        verify(userRepository).findByUsername(username);
         assertEquals(userDTOResponseEntity.getBody().getUsername(), user.getUsername());
         assertEquals(userDTOResponseEntity.getBody().getEmail(), user.getEmail());
         assertEquals(userDTOResponseEntity.getStatusCode(), HttpStatus.OK);
