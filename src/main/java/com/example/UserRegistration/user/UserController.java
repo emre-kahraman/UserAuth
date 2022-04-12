@@ -28,8 +28,8 @@ public class UserController {
         return userservice.getbyEmail(email);
     }
 
-    @GetMapping("/users/findbyusername/{name}")
-    public ResponseEntity<UserDTO> getbyUsername(@PathVariable("name") String username){
+    @GetMapping("/users/findbyusername/{username}")
+    public ResponseEntity<UserDTO> getbyUsername(@PathVariable("username") String username){
         return userservice.getbyUsername(username);
     }
 
