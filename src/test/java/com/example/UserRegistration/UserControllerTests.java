@@ -116,7 +116,7 @@ public class UserControllerTests {
 
         when(userService.getbyUsername(userDTO.getUsername())).thenReturn(new ResponseEntity<>(userDTO, HttpStatus.OK));
 
-        mockMvc.perform(get("/api/users/findbyusername/{name}", userDTO.getUsername()))
+        mockMvc.perform(get("/api/users/findbyusername/{username}", userDTO.getUsername()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username", Matchers.is(userDTO.getUsername())));
     }
