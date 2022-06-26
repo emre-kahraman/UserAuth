@@ -1,9 +1,12 @@
 package com.example.UserRegistration;
 
-import com.example.UserRegistration.user.User;
-import com.example.UserRegistration.user.UserDTO;
-import com.example.UserRegistration.user.UserRepository;
-import com.example.UserRegistration.user.UserService;
+import com.example.UserRegistration.dto.SignUpRequest;
+import com.example.UserRegistration.entity.Role;
+import com.example.UserRegistration.entity.User;
+import com.example.UserRegistration.dto.UserDTO;
+import com.example.UserRegistration.repository.RoleRepository;
+import com.example.UserRegistration.repository.UserRepository;
+import com.example.UserRegistration.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,6 +34,9 @@ public class UserServiceTests {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private RoleRepository roleRepository;
+
     @Test
     public void itShouldReturnAllUsers(){
 
@@ -54,11 +60,13 @@ public class UserServiceTests {
 
         User user = new User("test","test","test@gmail.com");
 
-        when(userRepository.save(user)).thenReturn(user);
+        SignUpRequest signUpRequest = new SignUpRequest("test","test","test@gmail.com");
 
-        ResponseEntity<UserDTO> userDTOResponseEntity = userService.registerUser(user);
+        when(userRepository.save(any())).thenReturn(user);
 
-        verify(userRepository).save(user);
+        ResponseEntity<UserDTO> userDTOResponseEntity = userService.registerUser(signUpRequest);
+
+        verify(userRepository).save(any());
         assertEquals(userDTOResponseEntity.getBody().getUsername(), user.getUsername());
         assertEquals(userDTOResponseEntity.getBody().getEmail(), user.getEmail());
         assertEquals(userDTOResponseEntity.getStatusCode(), HttpStatus.CREATED);
@@ -110,5 +118,23 @@ public class UserServiceTests {
         assertEquals(userDTOResponseEntity.getBody().getUsername(), user.getUsername());
         assertEquals(userDTOResponseEntity.getBody().getEmail(), user.getEmail());
         assertEquals(userDTOResponseEntity.getStatusCode(), HttpStatus.OK);
+    }
+
+    @Test
+    public void itShouldAddRoleToUser(){
+
+        User user = new User("test","test","test@gmail.com");
+        Role role = new Role("USER");
+
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(user);
+        when(roleRepository.findByName(role.getName())).thenReturn(role);
+
+        ResponseEntity<UserDTO> userDTOResponseEntity = userService.addRoleToUser(user.getUsername(), role.getName());
+
+        verify(userRepository).findByUsername(user.getUsername());
+        verify(roleRepository).findByName(role.getName());
+        assertEquals(userDTOResponseEntity.getBody().getUsername(), user.getUsername());
+        assertEquals(userDTOResponseEntity.getBody().getRoles().size(), 1);
+        assertEquals(userDTOResponseEntity.getBody().getRoles().contains(role), true);
     }
 }

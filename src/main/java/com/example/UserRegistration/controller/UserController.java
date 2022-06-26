@@ -1,6 +1,11 @@
-package com.example.UserRegistration.user;
+package com.example.UserRegistration.controller;
 
 
+import com.example.UserRegistration.dto.AddRoleRequest;
+import com.example.UserRegistration.dto.SignUpRequest;
+import com.example.UserRegistration.entity.User;
+import com.example.UserRegistration.dto.UserDTO;
+import com.example.UserRegistration.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +39,13 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<UserDTO> registerUser(@RequestBody User user) {
-        return userservice.registerUser(user);
+    public ResponseEntity<UserDTO> registerUser(@RequestBody SignUpRequest signUpRequest) {
+        return userservice.registerUser(signUpRequest);
+    }
+
+    @PostMapping("/addRoleToUser")
+    public ResponseEntity<UserDTO> addRoleToUser(@RequestBody AddRoleRequest addRoleRequest){
+        return userservice.addRoleToUser(addRoleRequest.getUsername(), addRoleRequest.getRoleName());
     }
 
     @DeleteMapping("/users/{id}")

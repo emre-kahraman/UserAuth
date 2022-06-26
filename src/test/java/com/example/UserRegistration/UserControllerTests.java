@@ -6,10 +6,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.example.UserRegistration.user.User;
-import com.example.UserRegistration.user.UserController;
-import com.example.UserRegistration.user.UserDTO;
-import com.example.UserRegistration.user.UserService;
+import com.example.UserRegistration.dto.AddRoleRequest;
+import com.example.UserRegistration.entity.Role;
+import com.example.UserRegistration.entity.User;
+import com.example.UserRegistration.controller.UserController;
+import com.example.UserRegistration.dto.UserDTO;
+import com.example.UserRegistration.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -21,10 +24,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @ExtendWith(SpringExtension.class)
@@ -44,6 +49,7 @@ public class UserControllerTests {
     MockMvc mockMvc;
 
     @Test
+    @WithMockUser
     public void itShouldGetAllUsers() throws Exception{
 
         List<UserDTO> userDTOList = new ArrayList<>();
@@ -66,6 +72,7 @@ public class UserControllerTests {
     }
 
     @Test
+    @WithMockUser
     public void itShouldRegisterUser() throws Exception{
 
         User user = new User("test","test","test@gmail.com");
@@ -84,6 +91,7 @@ public class UserControllerTests {
     }
 
     @Test
+    @WithMockUser
     public void itShouldDeleteUser() throws Exception{
 
         Long id = 1L;
@@ -94,6 +102,7 @@ public class UserControllerTests {
     }
 
     @Test
+    @WithMockUser
     public void itShouldGetUserByEmail() throws Exception {
 
         UserDTO userDTO = new UserDTO();
@@ -108,6 +117,7 @@ public class UserControllerTests {
     }
 
     @Test
+    @WithMockUser
     public void itShouldGetUserByUsername() throws Exception {
 
         UserDTO userDTO = new UserDTO();
@@ -119,5 +129,24 @@ public class UserControllerTests {
         mockMvc.perform(get("/api/users/findbyusername/{username}", userDTO.getUsername()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username", Matchers.is(userDTO.getUsername())));
+    }
+
+    @Test
+    @WithMockUser
+    public void itShouldAddRoleToUser() throws Exception {
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername("test");
+        userDTO.setRoles(new HashSet<Role>());
+        userDTO.getRoles().add(new Role("USER"));
+        AddRoleRequest addRoleRequest = new AddRoleRequest("test","USER");
+
+        when(userService.addRoleToUser(addRoleRequest.getUsername(),addRoleRequest.getRoleName())).thenReturn(new ResponseEntity<>(userDTO, HttpStatus.OK));
+
+        mockMvc.perform(post("/api/addRoleToUser")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(addRoleRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username", Matchers.is(userDTO.getUsername())))
+                .andExpect(jsonPath("$.roles", Matchers.hasSize(userDTO.getRoles().size())));
     }
 }
