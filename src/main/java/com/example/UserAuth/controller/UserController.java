@@ -1,11 +1,10 @@
-package com.example.UserRegistration.controller;
+package com.example.UserAuth.controller;
 
 
-import com.example.UserRegistration.dto.AddRoleRequest;
-import com.example.UserRegistration.dto.SignUpRequest;
-import com.example.UserRegistration.entity.User;
-import com.example.UserRegistration.dto.UserDTO;
-import com.example.UserRegistration.service.UserService;
+import com.example.UserAuth.dto.AddRoleRequest;
+import com.example.UserAuth.dto.SignUpRequest;
+import com.example.UserAuth.dto.UserDTO;
+import com.example.UserAuth.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,7 +1,7 @@
-package com.example.UserRegistration.service;
+package com.example.UserAuth.service;
 
-import com.example.UserRegistration.entity.Role;
-import com.example.UserRegistration.repository.RoleRepository;
+import com.example.UserAuth.entity.Role;
+import com.example.UserAuth.repository.RoleRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

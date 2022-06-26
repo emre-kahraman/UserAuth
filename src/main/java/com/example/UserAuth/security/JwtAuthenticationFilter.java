@@ -1,4 +1,4 @@
-package com.example.UserRegistration.security;
+package com.example.UserAuth.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

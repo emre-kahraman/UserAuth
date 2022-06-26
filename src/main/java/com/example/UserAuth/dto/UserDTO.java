@@ -1,6 +1,6 @@
-package com.example.UserRegistration.dto;
+package com.example.UserAuth.dto;
 
-import com.example.UserRegistration.entity.Role;
+import com.example.UserAuth.entity.Role;
 
 import java.util.Set;
 

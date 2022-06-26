@@ -1,7 +1,7 @@
-package com.example.UserRegistration.controller;
+package com.example.UserAuth.controller;
 
-import com.example.UserRegistration.entity.Role;
-import com.example.UserRegistration.service.RoleService;
+import com.example.UserAuth.entity.Role;
+import com.example.UserAuth.service.RoleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

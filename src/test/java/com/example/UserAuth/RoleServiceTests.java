@@ -1,8 +1,8 @@
-package com.example.UserRegistration;
+package com.example.UserAuth;
 
-import com.example.UserRegistration.entity.Role;
-import com.example.UserRegistration.repository.RoleRepository;
-import com.example.UserRegistration.service.RoleService;
+import com.example.UserAuth.entity.Role;
+import com.example.UserAuth.repository.RoleRepository;
+import com.example.UserAuth.service.RoleService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

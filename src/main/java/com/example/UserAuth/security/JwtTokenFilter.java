@@ -1,4 +1,4 @@
-package com.example.UserRegistration.security;
+package com.example.UserAuth.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -28,8 +28,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if(request.getServletPath().equals("/login"))
-            filterChain.doFilter(request, response);
 
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if(header != null && header.startsWith("Bearer ")){
@@ -42,7 +40,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                         .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorityList);
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                filterChain.doFilter(request, response);
             }
             catch (Exception exception){
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);

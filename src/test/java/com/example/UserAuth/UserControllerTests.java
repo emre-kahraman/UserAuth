@@ -1,4 +1,4 @@
-package com.example.UserRegistration;
+package com.example.UserAuth;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -6,13 +6,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.example.UserRegistration.dto.AddRoleRequest;
-import com.example.UserRegistration.entity.Role;
-import com.example.UserRegistration.entity.User;
-import com.example.UserRegistration.controller.UserController;
-import com.example.UserRegistration.dto.UserDTO;
-import com.example.UserRegistration.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.example.UserAuth.dto.AddRoleRequest;
+import com.example.UserAuth.entity.Role;
+import com.example.UserAuth.entity.User;
+import com.example.UserAuth.controller.UserController;
+import com.example.UserAuth.dto.UserDTO;
+import com.example.UserAuth.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

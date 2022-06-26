@@ -1,12 +1,12 @@
-package com.example.UserRegistration.service;
+package com.example.UserAuth.service;
 
 
-import com.example.UserRegistration.dto.SignUpRequest;
-import com.example.UserRegistration.entity.Role;
-import com.example.UserRegistration.entity.User;
-import com.example.UserRegistration.repository.RoleRepository;
-import com.example.UserRegistration.repository.UserRepository;
-import com.example.UserRegistration.dto.UserDTO;
+import com.example.UserAuth.dto.SignUpRequest;
+import com.example.UserAuth.entity.Role;
+import com.example.UserAuth.entity.User;
+import com.example.UserAuth.repository.RoleRepository;
+import com.example.UserAuth.repository.UserRepository;
+import com.example.UserAuth.dto.UserDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -45,7 +45,7 @@ public class UserService implements UserDetailsService {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 
         String encryptedpassword = bCryptPasswordEncoder.encode(signUpRequest.getPassword());
-        User savedUser = repo.save(new User(signUpRequest.getUsername(), signUpRequest.getEmail(), encryptedpassword));
+        User savedUser = repo.save(new User(signUpRequest.getUsername(),encryptedpassword, signUpRequest.getEmail()));
         UserDTO userDTO = convert(savedUser);
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }

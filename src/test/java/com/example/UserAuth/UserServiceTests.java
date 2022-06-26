@@ -1,12 +1,12 @@
-package com.example.UserRegistration;
+package com.example.UserAuth;
 
-import com.example.UserRegistration.dto.SignUpRequest;
-import com.example.UserRegistration.entity.Role;
-import com.example.UserRegistration.entity.User;
-import com.example.UserRegistration.dto.UserDTO;
-import com.example.UserRegistration.repository.RoleRepository;
-import com.example.UserRegistration.repository.UserRepository;
-import com.example.UserRegistration.service.UserService;
+import com.example.UserAuth.dto.SignUpRequest;
+import com.example.UserAuth.entity.Role;
+import com.example.UserAuth.entity.User;
+import com.example.UserAuth.dto.UserDTO;
+import com.example.UserAuth.repository.RoleRepository;
+import com.example.UserAuth.repository.UserRepository;
+import com.example.UserAuth.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,6 +1,6 @@
-package com.example.UserRegistration;
+package com.example.UserAuth;
 
-import com.example.UserRegistration.service.UserService;
+import com.example.UserAuth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;

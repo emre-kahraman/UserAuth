@@ -1,4 +1,4 @@
-package com.example.UserRegistration.dto;
+package com.example.UserAuth.dto;
 
 public class AddRoleRequest {
 

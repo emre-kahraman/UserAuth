@@ -1,10 +1,9 @@
-package com.example.UserRegistration;
+package com.example.UserAuth;
 
-import com.example.UserRegistration.controller.RoleController;
-import com.example.UserRegistration.entity.Role;
-import com.example.UserRegistration.service.RoleService;
-import com.example.UserRegistration.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.example.UserAuth.controller.RoleController;
+import com.example.UserAuth.entity.Role;
+import com.example.UserAuth.service.RoleService;
+import com.example.UserAuth.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

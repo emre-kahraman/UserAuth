@@ -1,6 +1,6 @@
-package com.example.UserRegistration.security;
+package com.example.UserAuth.security;
 
-import com.example.UserRegistration.service.UserService;
+import com.example.UserAuth.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
