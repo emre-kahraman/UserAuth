@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RoleService {
 
@@ -20,5 +22,18 @@ public class RoleService {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         Role savedRole = roleRepository.save(role);
         return new ResponseEntity<>(savedRole, HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<List<Role>> getRoles() {
+        List<Role> roles = roleRepository.findAll();
+        return new ResponseEntity<>(roles, HttpStatus.OK);
+    }
+
+    public ResponseEntity<HttpStatus> deleteRole(String name) {
+        Role role = roleRepository.findByName(name);
+        if(role == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        roleRepository.delete(role);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

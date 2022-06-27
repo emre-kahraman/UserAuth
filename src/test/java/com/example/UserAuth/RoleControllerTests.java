@@ -19,9 +19,12 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,5 +59,31 @@ public class RoleControllerTests {
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(role)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", Matchers.is(role.getName())));
+    }
+
+    @Test
+    @WithMockUser
+    public void itShouldGetRoles() throws Exception {
+
+        List<Role> roleList = new ArrayList<>();
+        roleList.add(new Role("USER"));
+        roleList.add(new Role("ADMIN"));
+
+        when(roleService.getRoles()).thenReturn(new ResponseEntity<>(roleList, HttpStatus.OK));
+
+        mockMvc.perform(get("/api/roles"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.hasSize(roleList.size())));
+    }
+
+    @Test
+    @WithMockUser
+    public void itShouldDeleteRole() throws Exception {
+
+        Role role = new Role("USER");
+
+        when(roleService.deleteRole(role.getName())).thenReturn(new ResponseEntity<>(HttpStatus.OK));
+
+        mockMvc.perform(delete("/api/roles/{name}", role.getName())).andExpect(status().isOk());
     }
 }

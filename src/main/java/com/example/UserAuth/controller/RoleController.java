@@ -2,11 +2,11 @@ package com.example.UserAuth.controller;
 
 import com.example.UserAuth.entity.Role;
 import com.example.UserAuth.service.RoleService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/roles")
@@ -21,5 +21,15 @@ public class RoleController {
     @PostMapping()
     public ResponseEntity<Role> saveRole(@RequestBody Role role){
         return roleService.addRole(role);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<Role>> getRoles(){
+        return roleService.getRoles();
+    }
+
+    @DeleteMapping("/{name}")
+    public ResponseEntity<HttpStatus> deleteRoleByName(@PathVariable String name){
+        return roleService.deleteRole(name);
     }
 }
