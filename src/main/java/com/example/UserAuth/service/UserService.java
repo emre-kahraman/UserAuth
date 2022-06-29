@@ -82,10 +82,11 @@ public class UserService implements UserDetailsService {
         if(user==null||role==null)
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         user.getRoles().add(role);
+        User savedUser = repo.save(user);
         UserDTO userDTO = new UserDTO();
-        userDTO.setUsername(user.getUsername());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setRoles(user.getRoles());
+        userDTO.setUsername(savedUser.getUsername());
+        userDTO.setEmail(savedUser.getEmail());
+        userDTO.setRoles(savedUser.getRoles());
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 

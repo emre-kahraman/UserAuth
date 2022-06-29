@@ -128,6 +128,7 @@ public class UserServiceTests {
 
         when(userRepository.findByUsername(user.getUsername())).thenReturn(user);
         when(roleRepository.findByName(role.getName())).thenReturn(role);
+        when(userRepository.save(user)).thenReturn(user);
 
         ResponseEntity<UserDTO> userDTOResponseEntity = userService.addRoleToUser(user.getUsername(), role.getName());
 
