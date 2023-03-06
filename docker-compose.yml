@@ -1,0 +1,11 @@
+version: '3.1'
+services:
+  postgres:
+    image: postgres
+    container_name: userauth
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: userauth
+    ports:
+      - 5432:5432
