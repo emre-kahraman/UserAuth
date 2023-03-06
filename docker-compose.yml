@@ -9,3 +9,13 @@ services:
       POSTGRES_DB: userauth
     ports:
       - 5432:5432
+  backend:
+    build: ./
+    image: userauthbeackend
+    container_name: userauthbackend
+    environment:
+      spring_datasource_url: jdbc:postgresql://postgres:5432/userauth
+    depends_on:
+      - postgres
+    ports:
+      - 8080:8080
