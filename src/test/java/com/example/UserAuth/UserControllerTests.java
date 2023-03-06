@@ -17,6 +17,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,7 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(UserController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class UserControllerTests {
 
     @MockBean
@@ -125,7 +127,7 @@ public class UserControllerTests {
 
         when(userService.getbyUsername(userDTO.getUsername())).thenReturn(new ResponseEntity<>(userDTO, HttpStatus.OK));
 
-        mockMvc.perform(get("/api/users/findbyusername/{username}", userDTO.getUsername()))
+        mockMvc.perform(get("/api/users/findByUsername/{username}", userDTO.getUsername()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username", Matchers.is(userDTO.getUsername())));
     }
@@ -142,7 +144,7 @@ public class UserControllerTests {
 
         when(userService.addRoleToUser(addRoleRequest.getUsername(),addRoleRequest.getRoleName())).thenReturn(new ResponseEntity<>(userDTO, HttpStatus.OK));
 
-        mockMvc.perform(post("/api/addRoleToUser")
+        mockMvc.perform(post("/api/users/addRoleToUser")
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(addRoleRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username", Matchers.is(userDTO.getUsername())))

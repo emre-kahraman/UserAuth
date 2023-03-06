@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userservice;
@@ -22,22 +22,22 @@ public class UserController {
     }
 
 
-    @GetMapping("/users")
+    @GetMapping
     public ResponseEntity<List<UserDTO>> getUsers(){
         return userservice.getUsers();
     }
 
-    @GetMapping("/users/{email}")
-    public ResponseEntity<UserDTO> getbyEmail(@PathVariable("email") String email){
+    @GetMapping("/{email}")
+    public ResponseEntity<UserDTO> getByEmail(@PathVariable String email){
         return userservice.getbyEmail(email);
     }
 
-    @GetMapping("/users/findbyusername/{username}")
-    public ResponseEntity<UserDTO> getbyUsername(@PathVariable("username") String username){
+    @GetMapping("/findByUsername/{username}")
+    public ResponseEntity<UserDTO> getByUsername(@PathVariable String username){
         return userservice.getbyUsername(username);
     }
 
-    @PostMapping("/users")
+    @PostMapping
     public ResponseEntity<UserDTO> registerUser(@RequestBody SignUpRequest signUpRequest) {
         return userservice.registerUser(signUpRequest);
     }
@@ -47,8 +47,8 @@ public class UserController {
         return userservice.addRoleToUser(addRoleRequest.getUsername(), addRoleRequest.getRoleName());
     }
 
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id){
         return userservice.deleteUser(id);
     }
 
