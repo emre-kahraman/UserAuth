@@ -35,8 +35,7 @@ public class UserService implements UserDetailsService {
 
     public ResponseEntity<List<UserDTO>> getUsers(){
         List<User> users = repo.findAll();
-        List<UserDTO> userDTOList = new ArrayList<UserDTO>();
-        users.stream().forEach(user -> userDTOList.add(convert(user)));
+        List<UserDTO> userDTOList = users.stream().map(this::convert).collect(Collectors.toList());
         return new ResponseEntity<>(userDTOList, HttpStatus.OK);
     }
 
