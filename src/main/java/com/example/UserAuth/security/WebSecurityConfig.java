@@ -31,8 +31,8 @@ public class WebSecurityConfig {
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeHttpRequests((auth) -> {
-            auth.anyRequest().authenticated();}).authenticationProvider(authenticationProvider());
+        http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeHttpRequests((auth) -> {
+            auth.requestMatchers("/swagger-ui/*", "/v3/api-docs", "/v3/api-docs/*").permitAll().anyRequest().authenticated();}).authenticationProvider(authenticationProvider());
         http.addFilterBefore(new JwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))));
         return http.build();
