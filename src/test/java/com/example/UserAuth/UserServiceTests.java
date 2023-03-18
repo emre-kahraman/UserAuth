@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -94,7 +95,7 @@ public class UserServiceTests {
         String email = "test@gmail.com";
         User user = new User("test","test","test@gmail.com");
 
-        when(userRepository.findByEmail(email)).thenReturn(user);
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 
         ResponseEntity<UserDTO> userDTOResponseEntity = userService.getbyEmail(email);
 
@@ -110,7 +111,7 @@ public class UserServiceTests {
         String username = "test";
         User user = new User("test","test","test@gmail.com");
 
-        when(userRepository.findByUsername(username)).thenReturn(user);
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
         ResponseEntity<UserDTO> userDTOResponseEntity = userService.getbyUsername(username);
 
@@ -126,8 +127,8 @@ public class UserServiceTests {
         User user = new User("test","test","test@gmail.com");
         Role role = new Role("USER");
 
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(user);
-        when(roleRepository.findByName(role.getName())).thenReturn(role);
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(roleRepository.findByName(role.getName())).thenReturn(Optional.of(role));
         when(userRepository.save(user)).thenReturn(user);
 
         ResponseEntity<UserDTO> userDTOResponseEntity = userService.addRoleToUser(user.getUsername(), role.getName());

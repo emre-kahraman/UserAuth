@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -62,7 +63,7 @@ public class RoleServiceTests {
 
         Role role = new Role("USER");
 
-        when(roleRepository.findByName(role.getName())).thenReturn(role);
+        when(roleRepository.findByName(role.getName())).thenReturn(Optional.of(role));
         doNothing().when(roleRepository).delete(role);
 
         ResponseEntity<HttpStatus> roleResponseEntity = roleService.deleteRole(role.getName());
