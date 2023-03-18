@@ -1,12 +1,14 @@
 package com.example.UserAuth.service;
 
 import com.example.UserAuth.entity.Role;
+import com.example.UserAuth.exception.EntityNotFoundException;
 import com.example.UserAuth.repository.RoleRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoleService {
@@ -30,9 +32,7 @@ public class RoleService {
     }
 
     public ResponseEntity<HttpStatus> deleteRole(String name) {
-        Role role = roleRepository.findByName(name);
-        if(role == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Role role = roleRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Role with name: " + name + " not found"));
         roleRepository.delete(role);
         return new ResponseEntity<>(HttpStatus.OK);
     }
