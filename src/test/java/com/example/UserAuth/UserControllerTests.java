@@ -11,6 +11,7 @@ import com.example.UserAuth.entity.Role;
 import com.example.UserAuth.entity.User;
 import com.example.UserAuth.controller.UserController;
 import com.example.UserAuth.dto.UserDTO;
+import com.example.UserAuth.exception.EntityNotFoundException;
 import com.example.UserAuth.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
@@ -149,5 +150,15 @@ public class UserControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username", Matchers.is(userDTO.getUsername())))
                 .andExpect(jsonPath("$.roles", Matchers.hasSize(userDTO.getRoles().size())));
+    }
+
+    @Test
+    @WithMockUser
+    public void itShouldReturnEntityNotFound() throws Exception {
+
+        when(userService.getbyUsername("test")).thenThrow(new EntityNotFoundException("Role with name: " + "test" + " not found"));
+
+        mockMvc.perform(get("/api/users/findByUsername/{username}", "test"))
+                .andExpect(status().isNotFound());
     }
 }
