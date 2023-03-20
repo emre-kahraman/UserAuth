@@ -23,6 +23,11 @@ public class RoleController {
         return roleService.addRole(role);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Role> getRole(@PathVariable Long id){
+        return roleService.getRole(id);
+    }
+
     @GetMapping()
     public ResponseEntity<List<Role>> getRoles(){
         return roleService.getRoles();
