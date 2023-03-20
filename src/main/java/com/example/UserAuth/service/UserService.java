@@ -41,8 +41,15 @@ public class UserService implements UserDetailsService {
         return new ResponseEntity<>(userDTOList, HttpStatus.OK);
     }
 
+    public ResponseEntity<UserDTO> getUser(Long id){
+        User user = repo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User with id: " + id + " not found"));
+        UserDTO userDTO = convert(user);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
     public ResponseEntity<UserDTO> registerUser(SignUpRequest signUpRequest) {
-        if(repo.findByUsername(signUpRequest.getUsername())!=null||repo.findByEmail(signUpRequest.getEmail())!=null)
+        if(!repo.findByUsername(signUpRequest.getUsername()).isEmpty() && !repo.findByEmail(signUpRequest.getEmail()).isEmpty())
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 
         String encryptedpassword = bCryptPasswordEncoder.encode(signUpRequest.getPassword());
@@ -69,14 +76,14 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<UserDTO> getbyUsername(String username) {
-        User user = repo.findByEmail(username)
+        User user = repo.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("User with username: " + username + " not found"));
         UserDTO userDTO = convert(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     public ResponseEntity<UserDTO> addRoleToUser(String username, String roleName){
-        User user = repo.findByEmail(username)
+        User user = repo.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("User with username: " + username + " not found"));
         Role role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new EntityNotFoundException("Role with name: " + roleName + " not found"));
