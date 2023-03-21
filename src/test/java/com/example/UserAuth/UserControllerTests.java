@@ -75,6 +75,22 @@ public class UserControllerTests {
 
     @Test
     @WithMockUser
+    public void itShouldGetUser() throws Exception {
+
+        Long id = 1l;
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername("test");
+        userDTO.setEmail("test@gmail.com");
+
+        when(userService.getUser(id)).thenReturn(new ResponseEntity<>(userDTO, HttpStatus.OK));
+
+        mockMvc.perform(get("/api/users/{id}", id))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username", Matchers.is(userDTO.getUsername())));
+    }
+
+    @Test
+    @WithMockUser
     public void itShouldRegisterUser() throws Exception{
 
         User user = new User("test","test","test@gmail.com");
@@ -113,7 +129,7 @@ public class UserControllerTests {
 
         when(userService.getbyEmail(userDTO.getEmail())).thenReturn(new ResponseEntity<>(userDTO, HttpStatus.OK));
 
-        mockMvc.perform(get("/api/users/{email}", userDTO.getEmail()))
+        mockMvc.perform(get("/api/users/findByEmail/{email}", userDTO.getEmail()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username", Matchers.is(userDTO.getUsername())));
     }

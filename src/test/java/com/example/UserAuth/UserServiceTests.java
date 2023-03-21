@@ -57,6 +57,22 @@ public class UserServiceTests {
     }
 
     @Test
+    public void itShouldGetUser(){
+
+        Long id = 1l;
+        User user = new User("test","test","test@gmail.com");
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+
+        ResponseEntity<UserDTO> userDTOResponseEntity = userService.getUser(id);
+
+        verify(userRepository).findById(id);
+        assertEquals(userDTOResponseEntity.getBody().getUsername(), user.getUsername());
+        assertEquals(userDTOResponseEntity.getBody().getEmail(), user.getEmail());
+        assertEquals(userDTOResponseEntity.getStatusCode(), HttpStatus.OK);
+    }
+
+    @Test
     public void itShouldRegisterUser(){
 
         User user = new User("test","test","test@gmail.com");
