@@ -42,6 +42,21 @@ public class RoleServiceTests {
     }
 
     @Test
+    public void itShouldGetRole(){
+
+        Long id = 1l;
+        Role role = new Role("USER");
+
+        when(roleRepository.findById(id)).thenReturn(Optional.of(role));
+
+        ResponseEntity<Role> roleResponseEntity = roleService.getRole(id);
+
+        verify(roleRepository).findById(id);
+        assertEquals(roleResponseEntity.getBody().getName(), role.getName());
+        assertEquals(roleResponseEntity.getStatusCode(), HttpStatus.OK);
+    }
+
+    @Test
     public void itShouldGetAllRoles(){
 
         List<Role> roleList = new ArrayList<>();

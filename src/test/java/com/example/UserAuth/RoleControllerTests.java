@@ -65,6 +65,20 @@ public class RoleControllerTests {
 
     @Test
     @WithMockUser
+    public void itShouldGetRole() throws Exception {
+
+        Long id = 1l;
+        Role role = new Role("USER");
+
+        when(roleService.getRole(id)).thenReturn(new ResponseEntity<>(role, HttpStatus.OK));
+
+        mockMvc.perform(get("/api/roles/{id}", id))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", Matchers.is(role.getName())));
+    }
+
+    @Test
+    @WithMockUser
     public void itShouldGetRoles() throws Exception {
 
         List<Role> roleList = new ArrayList<>();
