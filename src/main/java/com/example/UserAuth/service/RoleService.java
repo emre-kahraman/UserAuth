@@ -20,7 +20,7 @@ public class RoleService {
     }
 
     public ResponseEntity<Role> addRole(Role role){
-        if(roleRepository.findByName(role.getName())!=null)
+        if(!roleRepository.findByName(role.getName()).isEmpty())
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         Role savedRole = roleRepository.save(role);
         return new ResponseEntity<>(savedRole, HttpStatus.CREATED);

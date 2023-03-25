@@ -8,6 +8,7 @@ import com.example.UserAuth.repository.RoleRepository;
 import com.example.UserAuth.repository.UserRepository;
 import com.example.UserAuth.service.UserService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +21,6 @@ import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
-@Transactional
 public class UserServiceIntegrationTests {
 
     @Autowired
@@ -32,13 +32,20 @@ public class UserServiceIntegrationTests {
     @Autowired
     private RoleRepository roleRepository;
 
-    @Test
-    public void itShouldReturnAllUsers(){
-
+    @BeforeEach
+    public void setup(){
+        userRepository.deleteAll();
+        roleRepository.deleteAll();
         User user1 = new User("test","test","test@gmail.com");
         User user2 = new User("test2","test2","test2@gmail.com");
         userRepository.save(user1);
         userRepository.save(user2);
+        Role role = new Role("USER");
+        roleRepository.save(role);
+    }
+
+    @Test
+    public void itShouldReturnAllUsers(){
 
         ResponseEntity<List<UserDTO>> userDTOListResponseEntity = userService.getUsers();
 
@@ -49,7 +56,7 @@ public class UserServiceIntegrationTests {
     @Test
     public void itShouldRegisterUser(){
 
-        SignUpRequest signUpRequest = new SignUpRequest("test","test","test@gmail.com");
+        SignUpRequest signUpRequest = new SignUpRequest("test3","test3@gmail.com", "test3");
 
         ResponseEntity<UserDTO> userDTOResponseEntity = userService.registerUser(signUpRequest);
 
@@ -61,13 +68,12 @@ public class UserServiceIntegrationTests {
     @Test
     public void itShouldAddRoleToUser(){
 
-        User user = new User("test","test","test@gmail.com");
-        Role role = new Role("USER");
+        String username = "test";
+        String role = "USER";
 
-        userRepository.save(user);
-        roleRepository.save(role);
+        System.out.println(userRepository.findByUsername(username));
 
-        ResponseEntity<UserDTO> userDTOResponseEntity = userService.addRoleToUser(user.getUsername(), role.getName());
+        ResponseEntity<UserDTO> userDTOResponseEntity = userService.addRoleToUser(username, role);
 
         Assertions.assertSame(userDTOResponseEntity.getStatusCode(), HttpStatus.OK);
         Assertions.assertSame(userDTOResponseEntity.getBody().getRoles().size(), 1);
@@ -76,39 +82,33 @@ public class UserServiceIntegrationTests {
     @Test
     public void itShouldDeleteUser(){
 
-        User user = new User("test","test","test@gmail.com");
-
-        Long id = userRepository.save(user).getId();
+        Long id = userRepository.findByUsername("test").get().getId();
 
         ResponseEntity<HttpStatus> httpStatusResponseEntity = userService.deleteUser(id);
 
         Assertions.assertSame(httpStatusResponseEntity.getStatusCode(), HttpStatus.OK);
-        Assertions.assertSame(userRepository.findById(id), Optional.empty());
+        Assertions.assertSame(userRepository.findById(1l), Optional.empty());
     }
 
     @Test
     public void itShouldGetUserByUsername(){
 
-        User user = new User("test","test","test@gmail.com");
+        String username = "test";
 
-        userRepository.save(user);
-
-        ResponseEntity<UserDTO> userDTOResponseEntity = userService.getbyUsername(user.getUsername());
+        ResponseEntity<UserDTO> userDTOResponseEntity = userService.getbyUsername(username);
 
         Assertions.assertSame(userDTOResponseEntity.getStatusCode(), HttpStatus.OK);
-        Assertions.assertTrue(userDTOResponseEntity.getBody().getUsername().equals(user.getUsername()));
+        Assertions.assertTrue(userDTOResponseEntity.getBody().getUsername().equals(username));
     }
 
     @Test
     public void itShouldGetUserByEmail(){
 
-        User user = new User("test","test","test@gmail.com");
+        String email = "test@gmail.com";
 
-        userRepository.save(user);
-
-        ResponseEntity<UserDTO> userDTOResponseEntity = userService.getbyEmail(user.getEmail());
+        ResponseEntity<UserDTO> userDTOResponseEntity = userService.getbyEmail(email);
 
         Assertions.assertSame(userDTOResponseEntity.getStatusCode(), HttpStatus.OK);
-        Assertions.assertTrue(userDTOResponseEntity.getBody().getEmail().equals(user.getEmail()));
+        Assertions.assertTrue(userDTOResponseEntity.getBody().getEmail().equals(email));
     }
 }

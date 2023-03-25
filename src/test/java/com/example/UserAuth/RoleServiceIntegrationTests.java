@@ -1,9 +1,11 @@
 package com.example.UserAuth;
 
 import com.example.UserAuth.entity.Role;
+import com.example.UserAuth.entity.User;
 import com.example.UserAuth.repository.RoleRepository;
 import com.example.UserAuth.service.RoleService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,9 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
-@Transactional
 public class RoleServiceIntegrationTests {
 
     @Autowired
@@ -23,10 +25,19 @@ public class RoleServiceIntegrationTests {
     @Autowired
     private RoleRepository roleRepository;
 
+    @BeforeEach
+    public void setup(){
+        roleRepository.deleteAll();
+        Role role = new Role("USER");
+        Role role2 = new Role("ADMIN");
+        roleRepository.save(role);
+        roleRepository.save(role2);
+    }
+
     @Test
     public void itShouldAddRole(){
 
-        Role role = new Role("USER");
+        Role role = new Role("TEST");
 
         ResponseEntity<Role> roleResponseEntity = roleService.addRole(role);
 
@@ -35,13 +46,16 @@ public class RoleServiceIntegrationTests {
     }
 
     @Test
+    public void itShouldGetRole(){
+
+        ResponseEntity<Role> roleResponseEntity = roleService.getRole(1l);
+
+        Assertions.assertSame(roleResponseEntity.getStatusCode(), HttpStatus.OK);
+        Assertions.assertSame(roleResponseEntity.getBody().getName(), "USER");
+    }
+
+    @Test
     public void itShouldGetAllRoles(){
-
-        Role role = new Role("USER");
-        Role role2 = new Role("ADMIN");
-
-        roleRepository.save(role);
-        roleRepository.save(role2);
 
         ResponseEntity<List<Role>> listResponseEntity = roleService.getRoles();
 
@@ -52,13 +66,11 @@ public class RoleServiceIntegrationTests {
     @Test
     public void itShouldDeleteRoleByName(){
 
-        Role role = new Role("USER");
+        String role = "USER";
 
-        roleRepository.save(role);
-
-        ResponseEntity<HttpStatus> roleResponseEntity = roleService.deleteRole(role.getName());
+        ResponseEntity<HttpStatus> roleResponseEntity = roleService.deleteRole(role);
 
         Assertions.assertSame(roleResponseEntity.getStatusCode(), HttpStatus.OK);
-        Assertions.assertSame(roleRepository.findByName(role.getName()), null);
+        Assertions.assertSame(roleRepository.findByName(role), Optional.empty());
     }
 }
