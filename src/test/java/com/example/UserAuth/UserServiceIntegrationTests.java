@@ -9,6 +9,7 @@ import com.example.UserAuth.repository.UserRepository;
 import com.example.UserAuth.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -51,6 +52,18 @@ public class UserServiceIntegrationTests {
 
         Assertions.assertSame(userDTOListResponseEntity.getStatusCode(), HttpStatus.OK);
         Assertions.assertSame(userDTOListResponseEntity.getBody().size(), 2);
+    }
+
+    @Test
+    @Order(1)
+    public void itShouldGetUser(){
+
+        Long id = userRepository.findByUsername("test").get().getId();
+
+        ResponseEntity<UserDTO> userDTOResponseEntity = userService.getUser(id);
+
+        Assertions.assertSame(userDTOResponseEntity.getStatusCode(), HttpStatus.OK);
+        Assertions.assertSame(userDTOResponseEntity.getBody().getUsername(), "test");
     }
 
     @Test
